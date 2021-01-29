@@ -1,0 +1,81 @@
+{# Edit ArchiveRecord #}
+<div class="modal src-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'Edit resource'|trans }} <small class="src-id"></small></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <small class="fa fa-download load-archive float-right"></small>
+                        <small class="text-muted mr-4 float-right">{{ 'Updated'|trans }} <i class="date-updated"></i></small>
+                        <small class="text-muted mr-4 float-right">{{ 'Created'|trans }} <i class="date-created"></i></small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="src-title">{{ 'Title'|trans }}</label>
+                    <input id="src-title" type="text" class="form-control src-title" placeholder="{{ 'Title'|trans }}" name="title">
+                </div>
+
+                <div class="form-group">
+                    <label for="src-float">{{ 'Float value'|trans }}</label>
+                    <input id="src-float" class="form-control src-float" type="number">
+                </div>
+
+                <div class="form-group">
+                    <label for="tags">{{ 'Tags'|trans }}</label><br>
+
+                    <div class="tags-list">
+                        {% for tag in tags %}
+                            <label class="tag-label" style="background-color: {{ tag.color }}">
+                                <input class="tag-item" type="checkbox" name="tag" value="{{ tag.title }}"> {{ tag.title }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="src-text">{{ 'Search text'|trans }}</label>
+                    <textarea name="text" id="src-text" class="form-control src-text"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="src-media">{{ 'Files'|trans }}</label>
+                    <form
+                            action="{{ path('app_doc_media') }}"
+                            id="src-media"
+                            method="post"
+                            enctype="multipart/form-data"
+                            class="dropzone"
+                            data-text="{{ 'Drop files here to upload'|trans }}"
+                            data-id="__new"
+                    ></form>
+                </div>
+                <div class="form-group document-list">
+                    <table class="table table-hover table-striped table-bordered table-success"
+                           data-text="{{ 'No records found'|trans }}"
+                    >
+                        <thead>
+                        <tr>
+                            <th>{{ 'Title'|trans }}</th>
+                            <th>{{ 'Original Name'|trans }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger delete">{{ 'Delete'|trans }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Close'|trans }}</button>
+                <button type="button" class="btn btn-primary save">{{ 'Save changes'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

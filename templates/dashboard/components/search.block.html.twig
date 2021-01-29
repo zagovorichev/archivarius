@@ -1,0 +1,35 @@
+<div class="container">
+    <span class="text-muted fa fa-gear float-right settings"></span>
+    <!-- search box -->
+    <div class="container mt-lg-5">
+        <div class="form-group seeker-group">
+            <label for="seeker" class="label text-muted h1">{{ 'document_search' | trans }}</label>
+            <p class="text-muted small">{{ 'count_resources'|trans({'count': count}) }}</p>
+
+            <div class="input-group input-group-lg">
+                <input
+                        data-url="{{ url('search') }}"
+                        class="form-control form-control-lg seeker"
+                        name="title" placeholder="{{ 'title' | trans }}"
+                        aria-describedby="search-btn"
+                >
+                <div class="input-group-append">
+                    <button class="btn btn-info search-btn" type="button"><span
+                                class="fa fa-search text-center"></span></button>
+                    <button class="btn btn-outline-secondary fa fa-download download-search-results" type="button"></button>
+                </div>
+            </div>
+
+            <div class="tags">
+                <div class="tags-list">
+                    {% for tag in tags %}
+                        <label class="tag-label" style="background-color: {{ tag.color }}">
+                            <input class="tag-item" type="checkbox" name="tag" value="{{ tag.title }}"> {{ tag.title }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

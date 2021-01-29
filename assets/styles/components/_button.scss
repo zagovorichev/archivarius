@@ -1,0 +1,33 @@
+.add-new-button {
+  position: absolute;
+  top: -2rem;
+  left: -2rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 4rem;
+  background-color: $blue-color;
+  border: none;
+  transition: 700ms;
+
+  &:active {
+    outline: none;
+    border: none;
+  }
+
+  &:focus {outline:0;}
+
+  &:hover {
+    transition: 700ms;
+    width: 7rem;
+    height: 7rem;
+    top: -3rem;
+    left: -3rem;
+  }
+}
+
+.float-create-btn {
+  position: fixed;
+  bottom: 50px;
+  right: 100px;
+  z-index: 1999;
+}

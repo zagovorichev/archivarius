@@ -1,0 +1,24 @@
+# Read the documentation: https://github.com/1up-lab/OneupFlysystemBundle/tree/master/Resources/doc/index.md
+oneup_flysystem:
+    adapters:
+        default_adapter:
+            local:
+                directory: '%kernel.cache_dir%/flysystem'
+        archive_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/archive'
+        settings_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/settings'
+        backup_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/backup'
+    filesystems:
+        backup_filesystem:
+            adapter: backup_adapter
+        settings_filesystem:
+            adapter: settings_adapter
+        archive_filesystem:
+            adapter: archive_adapter
+        default_filesystem:
+            adapter: default_adapter

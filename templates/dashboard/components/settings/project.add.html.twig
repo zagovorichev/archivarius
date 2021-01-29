@@ -1,0 +1,31 @@
+<div class="add-form">
+
+    <div class="form-group">
+        <label>
+            {{ 'Color'|trans }}
+            <input type="color" name="color" class="form-control color" style="min-width: 100px">
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            {{ 'Title'|trans }}
+            <input type="text" class="form-control title" placeholder="{{ 'Title'|trans }}" name="title">
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            {{ 'Type'|trans }}
+            <ul class="list-group list-group-horizontal type">
+                <li class="list-group-item list-group-item-action documents">{{ 'Documents'|trans }}</li>
+                <li class="list-group-item list-group-item-action finance active">{{ 'Finance'|trans }}</li>
+            </ul>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            {{ 'Primary'|trans }}
+            <input type="checkbox" class="form-control primary" name="isPrimary">
+        </label>
+    </div>
+    <button class="btn btn-success button-add" type="button">{{ 'Add'|trans }}</button>
+</div>

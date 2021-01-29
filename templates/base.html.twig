@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}DocIEs &circleddash; 2020{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body
+            data-controller="myswup @symfony/ux-swup/swup"
+            data-animate-history-browsing="data-animate-history-browsing" {# add this attribute to animate history browsing #}
+            data-theme="slide" {# or "fade", the default #}
+            data-debug="data-debug" {# add this attribute to enable debug #}
+    >
+
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </body>
+</html>

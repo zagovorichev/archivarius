@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="ru" target-language="ru" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="Zs2WiKK" resname="dashboard">
+        <source>dashboard</source>
+        <target>Доска документов</target>
+      </trans-unit>
+      <trans-unit id="qvIyBkY" resname="title">
+        <source>title</source>
+        <target>Название</target>
+      </trans-unit>
+      <trans-unit id="nSrNNrK" resname="create_resource">
+        <source>create_resource</source>
+        <target>Создать новую запись</target>
+      </trans-unit>
+      <trans-unit id="pVaFodQ" resname="document_search">
+        <source>document_search</source>
+        <target>Поиск документов</target>
+      </trans-unit>
+      <trans-unit id="bz0CSt3" resname="count_resources">
+        <source>count_resources</source>
+        <target>{count, plural, =0 {Нет документов в архиве} one {# документ в архиве} other {Документов в архиве: #}}</target>
+      </trans-unit>
+      <trans-unit id="3DgIiMT" resname="Loading">
+        <source>Loading</source>
+        <target>Загрузка</target>
+      </trans-unit>
+      <trans-unit id="A88Jmxk" resname="Add resource">
+        <source>Add resource</source>
+        <target>Добавить ресурс</target>
+      </trans-unit>
+      <trans-unit id="fZ63rLE" resname="Close">
+        <source>Close</source>
+        <target>Закрыть</target>
+      </trans-unit>
+      <trans-unit id="fozSBW2" resname="Title">
+        <source>Title</source>
+        <target>Название</target>
+      </trans-unit>
+      <trans-unit id="q8fpiSg" resname="Files">
+        <source>Files</source>
+        <target>Файлы</target>
+      </trans-unit>
+      <trans-unit id="ONJooQm" resname="Search text">
+        <source>Search text</source>
+        <target>Текст для поиска</target>
+      </trans-unit>
+      <trans-unit id="3Qrnpcv" resname="Save changes">
+        <source>Save changes</source>
+        <target>Сохранить изменения</target>
+      </trans-unit>
+      <trans-unit id="9eDKWuU" resname="Drop files here to upload">
+        <source>Drop files here to upload</source>
+        <target>Перетяните файлы сюда</target>
+      </trans-unit>
+      <trans-unit id="EzEnW8U" resname="Tags">
+        <source>Tags</source>
+        <target>Категории</target>
+      </trans-unit>
+      <trans-unit id="sO4xX0r" resname="Found">
+        <source>Found</source>
+        <target>Найдено</target>
+      </trans-unit>
+      <trans-unit id="bi6mN7M" resname="No records found">
+        <source>No records found</source>
+        <target>Записей не найдено</target>
+      </trans-unit>
+      <trans-unit id="5DcWthQ" resname="Tag title">
+        <source>Tag title</source>
+        <target>Название тэга</target>
+      </trans-unit>
+      <trans-unit id="PhCwjMh" resname="Add tag">
+        <source>Add tag</source>
+        <target>Добавить тэг</target>
+      </trans-unit>
+      <trans-unit id="GXZu1sy" resname="Cancel">
+        <source>Cancel</source>
+        <target>Отмена</target>
+      </trans-unit>
+      <trans-unit id="OEOXHc." resname="ID">
+        <source>ID</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="k8kchR5" resname="Price">
+        <source>Price</source>
+        <target>Цена</target>
+      </trans-unit>
+      <trans-unit id="R1lJisK" resname="Create">
+        <source>Create</source>
+        <target>Создать</target>
+      </trans-unit>
+      <trans-unit id="wcEAnT8" resname="Update">
+        <source>Update</source>
+        <target>Обновить</target>
+      </trans-unit>
+      <trans-unit id="6p0K__8" resname="Edit resource">
+        <source>Edit resource</source>
+        <target>Редактировать</target>
+      </trans-unit>
+      <trans-unit id="X.M8xtT" resname="Original Name">
+        <source>Original Name</source>
+        <target>Ориг. Название</target>
+      </trans-unit>
+      <trans-unit id="4tClSWj" resname="Delete">
+        <source>Delete</source>
+        <target>Удалить</target>
+      </trans-unit>
+      <trans-unit id="1wueJLy" resname="Created">
+        <source>Created</source>
+        <target>Создано</target>
+      </trans-unit>
+      <trans-unit id="Ol7MoYj" resname="Updated">
+        <source>Updated</source>
+        <target>Обновлено</target>
+      </trans-unit>
+      <trans-unit id="D0ITT5W" resname="Float value">
+        <source>Float value</source>
+        <target>Число с плав. значением</target>
+      </trans-unit>
+      <trans-unit id="a3MZGgp" resname="Color">
+        <source>Color</source>
+        <target>Цвет</target>
+      </trans-unit>
+      <trans-unit id="n9coxmy" resname="Add">
+        <source>Add</source>
+        <target>Добавить</target>
+      </trans-unit>
+      <trans-unit id="QK.oqag" resname="Delete this tag?">
+        <source>Delete this tag?</source>
+        <target>Удалить эту категорию?</target>
+      </trans-unit>
+      <trans-unit id="lsZuRrP" resname="Chart by categories">
+        <source>Chart by categories</source>
+        <target>График по категориям</target>
+      </trans-unit>
+      <trans-unit id="ybPDgkf" resname="Total">
+        <source>Total</source>
+        <target>Всего</target>
+      </trans-unit>
+      <trans-unit id="OnJ1MHk" resname="Unique">
+        <source>Unique</source>
+        <target>Уникально по сумме</target>
+      </trans-unit>
+      <trans-unit id="cmWDPuz" resname="Total spent">
+        <source>Total spent</source>
+        <target>Всего потрачено</target>
+      </trans-unit>
+      <trans-unit id="BOKpcor" resname="Projects">
+        <source>Projects</source>
+        <target>Проекты</target>
+      </trans-unit>
+      <trans-unit id="awzJBNC" resname="Users">
+        <source>Users</source>
+        <target>Пользователи</target>
+      </trans-unit>
+      <trans-unit id="dKiDoDe" resname="Settings">
+        <source>Settings</source>
+        <target>Настройки</target>
+      </trans-unit>
+      <trans-unit id="szLDSS1" resname="Configuration">
+        <source>Configuration</source>
+        <target>Конфигурация</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

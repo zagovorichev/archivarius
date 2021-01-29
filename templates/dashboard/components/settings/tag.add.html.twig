@@ -1,0 +1,17 @@
+<div class="form-group add-tag-form">
+    <div class="row">
+        <div class="col-4">
+            <label for="color">{{ 'Color'|trans }}</label>
+            <input id="color" type="color" name="color" class="form-control color">
+        </div>
+        <div class="col-6">
+            <label for="tag-name">{{ 'Title'|trans }}</label>
+            <div class="input-group">
+                <input id="tag-name" type="text" class="form-control tag-name" placeholder="{{ 'Title'|trans }}" name="title" aria-describedby="button-add-tag">
+                <div class="input-group-append">
+                    <button class="btn btn-success button-add-tag" type="button">{{ 'Add'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

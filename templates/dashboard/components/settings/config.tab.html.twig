@@ -1,0 +1,26 @@
+<div class="form-group">
+    <table class="table table-borderless">
+        <tbody>
+        <tr>
+            <td>
+                <label for="projects-checkbox" class="float-right">
+                    {{ 'Projects'|trans }}
+                </label>
+            </td>
+            <td>
+                <input id="projects-checkbox" class="form-control float-left" type="checkbox" name="projects" {{ settings.isProjects ? 'checked="checked"' : '' }}>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="users-checkbox" class="float-right">
+                    {{ 'Users'|trans }}
+                </label>
+            </td>
+            <td>
+                <input id="users-checkbox" class="form-control float-left" type="checkbox" name="users" {{ settings.isUsers ? 'checked="checked"' : '' }}>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

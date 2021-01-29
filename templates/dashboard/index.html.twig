@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'dashboard' | trans }} {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="archivarius" data-controller="dashboard @docies/dashboard/index">
+    {% include 'dashboard/components/create.btn.html.twig' %}
+    {% include 'dashboard/components/search.block.html.twig' %}
+    {% include 'dashboard/components/data.block.html.twig' %}
+    {% include 'dashboard/components/edit.archive.record.modal.html.twig' %}
+    {% include 'dashboard/components/edit.attachments.modal.html.twig' %}
+    {% include 'dashboard/components/settings/settings.modal.html.twig' %}
+</div>
+{% endblock %}

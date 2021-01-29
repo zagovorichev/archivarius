@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="ru" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="qvIyBkY" resname="title">
+        <source>title</source>
+        <target>Title</target>
+      </trans-unit>
+      <trans-unit id="Zs2WiKK" resname="dashboard">
+        <source>dashboard</source>
+        <target>Dashboard</target>
+      </trans-unit>
+      <trans-unit id="nSrNNrK" resname="create_resource">
+        <source>create_resource</source>
+        <target>Create new resource</target>
+      </trans-unit>
+      <trans-unit id="pVaFodQ" resname="document_search">
+        <source>document_search</source>
+        <target>Document search</target>
+      </trans-unit>
+      <trans-unit id="bz0CSt3" resname="count_resources">
+        <source>count_resources</source>
+        <target>{count, plural, =0 {There are no resources loaded} one {# resource loaded...} other {There are # resources!}}</target>
+      </trans-unit>
+      <trans-unit id="3DgIiMT" resname="Loading">
+        <source>Loading</source>
+        <target>Loading</target>
+      </trans-unit>
+      <trans-unit id="A88Jmxk" resname="Add resource">
+        <source>Add resource</source>
+        <target>Add resource</target>
+      </trans-unit>
+      <trans-unit id="fZ63rLE" resname="Close">
+        <source>Close</source>
+        <target>Close</target>
+      </trans-unit>
+      <trans-unit id="fozSBW2" resname="Title">
+        <source>Title</source>
+        <target>Title</target>
+      </trans-unit>
+      <trans-unit id="q8fpiSg" resname="Files">
+        <source>Files</source>
+        <target>Files</target>
+      </trans-unit>
+      <trans-unit id="ONJooQm" resname="Search text">
+        <source>Search text</source>
+        <target>Search text</target>
+      </trans-unit>
+      <trans-unit id="3Qrnpcv" resname="Save changes">
+        <source>Save changes</source>
+        <target>Save changes</target>
+      </trans-unit>
+      <trans-unit id="9eDKWuU" resname="Drop files here to upload">
+        <source>Drop files here to upload</source>
+        <target>Drop files here to upload</target>
+      </trans-unit>
+      <trans-unit id="EzEnW8U" resname="Tags">
+        <source>Tags</source>
+        <target>Tags</target>
+      </trans-unit>
+      <trans-unit id="sO4xX0r" resname="Found">
+        <source>Found</source>
+        <target>Found</target>
+      </trans-unit>
+      <trans-unit id="bi6mN7M" resname="No records found">
+        <source>No records found</source>
+        <target>No records found</target>
+      </trans-unit>
+      <trans-unit id="5DcWthQ" resname="Tag title">
+        <source>Tag title</source>
+        <target>Tag title</target>
+      </trans-unit>
+      <trans-unit id="PhCwjMh" resname="Add tag">
+        <source>Add tag</source>
+        <target>Add tag</target>
+      </trans-unit>
+      <trans-unit id="GXZu1sy" resname="Cancel">
+        <source>Cancel</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="OEOXHc." resname="ID">
+        <source>ID</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="k8kchR5" resname="Price">
+        <source>Price</source>
+        <target>Price</target>
+      </trans-unit>
+      <trans-unit id="R1lJisK" resname="Create">
+        <source>Create</source>
+        <target>Create</target>
+      </trans-unit>
+      <trans-unit id="wcEAnT8" resname="Update">
+        <source>Update</source>
+        <target>Update</target>
+      </trans-unit>
+      <trans-unit id="6p0K__8" resname="Edit resource">
+        <source>Edit resource</source>
+        <target>Edit resource</target>
+      </trans-unit>
+      <trans-unit id="X.M8xtT" resname="Original Name">
+        <source>Original Name</source>
+        <target>Original Name</target>
+      </trans-unit>
+      <trans-unit id="4tClSWj" resname="Delete">
+        <source>Delete</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="1wueJLy" resname="Created">
+        <source>Created</source>
+        <target>Created</target>
+      </trans-unit>
+      <trans-unit id="Ol7MoYj" resname="Updated">
+        <source>Updated</source>
+        <target>Updated</target>
+      </trans-unit>
+      <trans-unit id="D0ITT5W" resname="Float value">
+        <source>Float value</source>
+        <target>Float value</target>
+      </trans-unit>
+      <trans-unit id="a3MZGgp" resname="Color">
+        <source>Color</source>
+        <target>Color</target>
+      </trans-unit>
+      <trans-unit id="n9coxmy" resname="Add">
+        <source>Add</source>
+        <target>Add</target>
+      </trans-unit>
+      <trans-unit id="QK.oqag" resname="Delete this tag?">
+        <source>Delete this tag?</source>
+        <target>Delete this tag?</target>
+      </trans-unit>
+      <trans-unit id="lsZuRrP" resname="Chart by categories">
+        <source>Chart by categories</source>
+        <target>Chart by categories</target>
+      </trans-unit>
+      <trans-unit id="ybPDgkf" resname="Total">
+        <source>Total</source>
+        <target>Total</target>
+      </trans-unit>
+      <trans-unit id="OnJ1MHk" resname="Unique">
+        <source>Unique</source>
+        <target>Unique</target>
+      </trans-unit>
+      <trans-unit id="cmWDPuz" resname="Total spent">
+        <source>Total spent</source>
+        <target>Total spent</target>
+      </trans-unit>
+      <trans-unit id="BOKpcor" resname="Projects">
+        <source>Projects</source>
+        <target>Projects</target>
+      </trans-unit>
+      <trans-unit id="awzJBNC" resname="Users">
+        <source>Users</source>
+        <target>Users</target>
+      </trans-unit>
+      <trans-unit id="dKiDoDe" resname="Settings">
+        <source>Settings</source>
+        <target>Settings</target>
+      </trans-unit>
+      <trans-unit id="szLDSS1" resname="Configuration">
+        <source>Configuration</source>
+        <target>Configuration</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,24 @@
+<div class="form-group projects-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="list-group projects-list-group" id="list-tab" role="tablist">
+                    <a
+                       id="list-new-project"
+                       data-toggle="list"
+                       role="tab"
+                       aria-controls="new-project"
+                       class="list-group-item list-group-item-action active"
+                    >{{ 'New project'|trans }}</a>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="tab-content projects-tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="new-project" role="tabpanel" aria-labelledby="list-new-project">
+                        {% include 'dashboard/components/settings/project.add.html.twig' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

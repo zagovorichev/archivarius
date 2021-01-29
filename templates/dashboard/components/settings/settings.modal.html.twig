@@ -1,0 +1,49 @@
+{# settings #}
+<div class="modal fade settings-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="settingsModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'Settings'|trans }} <small class="src-id"></small></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link active setting-tags-btn">{{ 'Tags'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link setting-config-btn">{{ 'Configuration'|trans }}</a>
+                    </li>
+                    <li class="nav-item" {{ settings.isProjects ? '' : 'style="display: none"' }}>
+                        <a class="nav-link setting-projects-btn">{{ 'Projects'|trans }}</a>
+                    </li>
+                    <li class="nav-item" {{ settings.isUsers ? '' : 'style="display: none"' }}>
+                        <a class="nav-link setting-users-btn">{{ 'Users'|trans }}</a>
+                    </li>
+                </ul>
+
+                <div class="container tag-settings">
+                    {% include 'dashboard/components/settings/tag.add.html.twig' %}
+                    {% include 'dashboard/components/settings/tag.list.html.twig' %}
+                </div>
+
+                <div class="container config-settings">
+                    {% include 'dashboard/components/settings/config.tab.html.twig' %}
+                </div>
+
+                <div class="container project-settings">
+                    {% include 'dashboard/components/settings/project.tab.html.twig' %}
+                </div>
+
+                <div class="container users-settings">
+                    {% include 'dashboard/components/settings/user.tab.html.twig' %}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
