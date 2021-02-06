@@ -5,6 +5,12 @@
                 "enabled": true,
                 "webpackMode": "eager"
             }
+        },
+        "@symfony/ux-swup": {
+            "swup": {
+                "enabled": true,
+                "webpackMode": "eager"
+            }
         }
     },
     "entrypoints": []
