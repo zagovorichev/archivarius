@@ -5,10 +5,19 @@
 ## Configuration
 
 ### DEBUGGING:
+#### Locally
 ```shell
 # it run server which shows us requests in the console
 php bin/console server:dump
 ```
+#### In the docker
+```shell
+docker exec -it archivarius-build composer --dev symfony/phpunit-bridge
+docker exec -it archivarius-build bin/phpunit
+```
+
+And after the first run there will be a folder __.phpunit__ that we can use to connect PHPStorm
+
 
 ### PHP Unit tests
 `php bin/phpunit`

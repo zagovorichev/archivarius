@@ -15,10 +15,10 @@ services:
     working_dir: /etc/nginx/conf.d
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.archivarius.rule=Host(`archivarius.docker`)"
+      - "traefik.http.routers.archivarius.rule=Host(`archivarius.docker.localhost`)"
       - "traefik.http.routers.archivarius.entrypoints=http"
       - "traefik.http.routers.archivarius-secure.entrypoints=https"
-      - "traefik.http.routers.archivarius-secure.rule=Host(`archivarius.docker`)"
+      - "traefik.http.routers.archivarius-secure.rule=Host(`archivarius.docker.localhost`)"
       - "traefik.http.routers.archivarius-secure.tls=true"
 
   archivarius-phpfpm:
