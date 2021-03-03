@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  archivarius-nginx:
+    container_name: archivarius-nginx
+    image: nginx:stable
+    depends_on:
+      - archivarius-phpfpm
+    networks:
+      - archivarius-network
+      - traefik-public
+    volumes:
+      - ..:/var/www/html:cached
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached
+    working_dir: /etc/nginx/conf.d
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.archivarius.rule=Host(`archivarius.docker.localhost`)"
+      - "traefik.http.routers.archivarius.entrypoints=http"
+      - "traefik.http.routers.archivarius-secure.entrypoints=https"
+      - "traefik.http.routers.archivarius-secure.rule=Host(`archivarius.docker.localhost`)"
+      - "traefik.http.routers.archivarius-secure.tls=true"
+
+  archivarius-phpfpm:
+    container_name: archivarius-phpfpm
+    build:
+      context: ./phpfpm
+    networks:
+      - archivarius-network
+    volumes:
+      - ..:/var/www/html:cached
+    working_dir: /var/www/html
+
+  archivarius-build:
+    container_name: archivarius-build
+    build:
+      context: ./build
+    networks:
+      - archivarius-network
+    volumes:
+      - ..:/var/www/html:cached
+    working_dir: /var/www/html
+
+networks:
+  archivarius-network:
+    driver: bridge
+  traefik-public:
+    external: true
