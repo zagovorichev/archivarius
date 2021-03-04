@@ -1,10 +1,14 @@
 FROM php:8.0-fpm
 
-RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libpq-dev zip unzip sudo wget sqlite3 libsqlite3-dev libzstd-dev  libicu-dev libonig-dev libzip-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev \
+  libpq-dev zip unzip sudo wget sqlite3 libsqlite3-dev libzstd-dev \
+  libicu-dev libonig-dev libzip-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --with-jpeg
 
-# RUN yes | pecl install igbinary xdebug
+RUN yes | pecl install xdebug
+# igbinary
 
 RUN docker-php-ext-install intl && \
     docker-php-ext-install gd && \
@@ -13,10 +17,9 @@ RUN docker-php-ext-install intl && \
     docker-php-ext-install zip && \
     docker-php-ext-install calendar && \
     docker-php-ext-install sockets && \
-    docker-php-ext-install pcntl
-# && \
+    docker-php-ext-install pcntl && \
 #    docker-php-ext-enable igbinary && \
-#    docker-php-ext-enable xdebug
+    docker-php-ext-enable xdebug
 
 RUN { \
     echo 'opcache.memory_consumption=128'; \
@@ -28,13 +31,16 @@ RUN { \
     echo 'opcache.load_comments=1'; \
 } >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
-#RUN { \
-#   echo 'xdebug.remote_enable=1'; \
-#   echo 'xdebug.idekey = "STORM"'; \
-#   echo 'xdebug.remote_port=10000'; \
-#   echo 'xdebug.remote_autostart=1'; \
-#   echo 'xdebug.remote_log="/var/www/html/xdebug.log"'; \
-#} >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN { \
+   echo 'xdebug.mode=debug'; \
+   # echo 'xdebug.session = "ArchiDevPhpfpm"'; \
+   # echo 'xdebug.client_port=9003'; \
+   # echo 'xdebug.client_host=host.docker.internal' \
+   # echo 'xdebug.start_with_request=trigger'; \
+   # echo 'xdebug.start_with_request=yes'; \
+   echo 'xdebug.discover_client_host = 1'; \
+   # echo 'xdebug.remote_log="/var/www/html/xdebug.log"'; \
+} >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN { \
     echo 'memory_limit=512M'; \
