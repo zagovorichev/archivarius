@@ -1,6 +1,8 @@
 yarn-error.log
 .idea
-.env
+/.env
 public/build
 .vagrant
 ci/ansible/vars/vault.yml
+vendor
+node_modules
