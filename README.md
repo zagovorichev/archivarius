@@ -91,14 +91,22 @@ Run only jobs by tag
 ansible-playbook ci/ansible/playbook.yml -i ci/ansible/hosts.ini -t php-extensions
 ```
 
-Ansible Vault for secret data
+#### Ansible Vault for secret data
 ```shell
 ansible-vault create ci/ansible/vars/vault.yml
 ansible-vault view ci/ansible/vars/vault.yml
 ansible-vault edit ci/ansible/vars/vault.yml
 ```
 
-Now to use secret data:
+__variables__
+```yaml
+---
+vauld_symfony_secret: "asdf1234"
+vault_ssh_ip: "127.0.0.1"
+vault_ssh_username: "www-data"
+```
+
+#### How to use secret data:
 
 ```shell
 ansible-playbook ci/ansible/playbook.yml -i ci/ansible/hosts.ini -t php-extensions --ask-vault-pass
