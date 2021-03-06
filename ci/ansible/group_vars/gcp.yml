@@ -1,0 +1,4 @@
+---
+host_server_name: "{{ vault_ssh_ip }}"
+host_ssh_username: "{{ vault_ssh_username }}"
+host_ssh_ip: "{{ vault_ssh_ip }}"

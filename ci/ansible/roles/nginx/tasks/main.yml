@@ -1,0 +1,29 @@
+---
+- name: Install Nginx
+  become: true
+  apt:
+    name: nginx
+    state: latest
+  notify: Restart Nginx
+  tags:
+    - system
+
+- name: Set Nginx configuration
+  become: true
+  template:
+    src: templates/symfony.conf
+    dest: "/etc/nginx/sites-available/{{ server_name }}.conf"
+  notify: Restart Nginx
+  tags:
+    - system
+
+- name: Create symbolic link for nginx enabled file
+  become: true
+  file:
+    src: "/etc/nginx/sites-available/{{ server_name }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
+    state: link
+  notify: Restart Nginx
+  tags:
+    - system
+

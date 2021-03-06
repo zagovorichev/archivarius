@@ -1,0 +1,81 @@
+---
+
+#- hosts: all
+#
+#  tasks:
+#    - ping: ~
+
+- hosts: vb
+
+  vars_files:
+    - ./vars/vault.yml
+    - ./vars/vars.yml
+
+  vars_prompt:
+    - name: symfony_env
+      prompt: 'Enter the environment for Symfony app (prod|dev|test)'
+      default: prod
+      private: no
+
+  # runs before roles
+  pre_tasks:
+    - name: Convert Symfony environment to lowercase
+      set_fact:
+        symfony_env: "{{ symfony_env|lower }}"
+      tags:
+        - always
+      notify:
+        - APT Update
+        - APT Upgrade
+
+  # runs before pre_tasks
+  environment:
+    SYMFONY_ENV: "{{ symfony_env|lower }}"
+
+  roles:
+    #- system
+    #- localisation
+    #- php
+    #- git
+    #- nginx
+    - beforecomposersymfony
+    - composer
+    - yarn
+    - symfony
+
+  tasks:
+    - name: Remove useless packages
+      become: true
+      apt:
+        autoclean: true
+      tags:
+        - system
+
+    - name: Remove useless dependencies
+      become: true
+      apt:
+        autoremove: true
+      tags:
+        - system
+
+    - name: Register code_changed variable
+      set_fact:
+        code_changed: repo_code.changed
+      tags:
+        - deploy
+
+      #    - debug:
+      #        var: composer_self_update
+      #      tags:
+      #        - composercheck
+
+  handlers:
+    - name: APT Update
+      become: true
+      apt:
+        update_cache: yes
+
+    - name: APT Upgrade
+      become: true
+      apt:
+          upgrade: safe

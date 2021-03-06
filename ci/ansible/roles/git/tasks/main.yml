@@ -1,0 +1,17 @@
+---
+- name: Install GIT
+  become: true
+  apt:
+    name: git
+    state: latest
+  tags:
+    - system
+
+- name: Checkout Git repository
+  git:
+    repo: https://github.com/zagovorichev/archivarius.git
+    dest: "{{ symfony_root_dir }}"
+    force: yes
+  register: repo_code
+  tags:
+    - deploy

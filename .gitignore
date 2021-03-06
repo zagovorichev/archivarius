@@ -3,3 +3,4 @@ yarn-error.log
 .env
 public/build
 .vagrant
+ci/ansible/vars/vault.yml

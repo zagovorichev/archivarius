@@ -1,0 +1,96 @@
+---
+- name: Install utilities for PHP
+  become: true
+  apt:
+    name: [
+        'lsb-release',
+        'ca-certificates',
+        'apt-transport-https',
+        'curl'
+    ]
+    state: latest
+  tags:
+    - php
+    - system
+
+- name: Ensure file exists php.gpg
+  become: true
+  copy:
+    content: ""
+    dest: /etc/apt/trusted.gpg.d/php.gpg
+    force: no
+    group: "{{ ansible_user }}"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+
+### too many timeout error messages
+- name: Install PHP 8 Sury repository key
+  become: true
+  get_url:
+    url: https://packages.sury.org/php/apt.gpg
+    dest: /etc/apt/trusted.gpg.d/php.gpg
+    force: true
+    timeout: 10
+  retries: 5
+  delay: 3
+  tags:
+    - php
+    - system
+
+- name: Sury service Kyes
+  become: true
+  shell: sh -c "curl -1 https://packages.sury.org/php/apt.gpg -o /etc/apt/trusted.gpg.d/php.gpg"
+  tags:
+    - php
+    - system
+
+#- name: Sury service Kyes
+#  become: true
+#  shell: sh -c "wget --user-agent="Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.3) Gecko/2008092416 Firefox/3.0.3" https://packages.sury.org/php/apt.gpg -o /etc/apt/trusted.gpg.d/php.gpg"
+#  tags:
+#    - php
+#    - system
+
+- name: Install PHP 8 repository
+  become: true
+  shell: sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+  tags:
+    - php
+    - system
+  notify:
+    - APT Update
+    #- APT Upgrade
+
+- meta: flush_handlers
+
+#- name: APT Update for php
+#  become: true
+#  apt:
+#    update_cache: yes
+
+- name: Install PHP 8
+  become: true
+  apt:
+    name: [
+        'php8.0',
+        'php8.0-cli',
+        'php8.0-curl',
+        'php8.0-fpm',
+        'php8.0-xml',
+        'php8.0-intl',
+        'php8.0-zip'
+    ]
+  tags:
+    - php
+    - php-extensions
+    - system
+  notify: Restart PHP-fpm
+
+# I prefer to use different files
+# - example /usr/local/etc/php/conf.d/php-ext-memory-limit.ini
+#    - name: Set PHP.ini configurations
+#      become: true
+#      lineinfile:
+#        dest: /etc/php/8.0/cli/php.ini
+#        regexp: "memory_limit="
+#        line: "memory_limit=512M"

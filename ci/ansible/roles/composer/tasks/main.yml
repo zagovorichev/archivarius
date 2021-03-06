@@ -1,0 +1,64 @@
+---
+- name: Install utitlities for Composer
+  become: true
+  apt:
+    name: [
+        'zip',
+        'unzip'
+    ]
+  tags:
+    - system
+
+- name: Check for Composer
+  stat:
+    path: /usr/local/bin/composer
+  register: composer_stat
+  tags:
+    - deploy
+    - composercheck
+
+- name: Download Composer
+  script: scripts/install_composer.sh
+  when: not composer_stat.stat.exists
+  tags:
+    - system
+    - composer
+    - composercheck
+
+- name: Move Composer to global
+  become: true
+  command: "mv composer.phar /usr/local/bin/composer"
+  when: not composer_stat.stat.exists
+  tags:
+    - system
+    - composer
+
+- name: Set Permissions on Composer
+  become: true
+  file:
+    path: /usr/local/bin/composer
+    mode: "a+x"
+  when: not composer_stat.stat.exists
+  tags:
+    - system
+    - composer
+
+- name: Make sure Composer is at its latest version
+  composer:
+    working_dir: "{{ symfony_root_dir }}"
+    command: self-update
+  when: composer_stat.stat.exists
+  register: composer_self_update
+  changed_when: " 'You are already using the latest available Composer version'|string not in composer_self_update.stdout"
+  tags:
+    - deploy
+    - composercheck
+
+- name: Install Composer's dependencies
+  composer:
+    working_dir: "{{ symfony_root_dir }}"
+    no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
+  # when: code_changed | bool it will break switching between dev and prod
+  tags:
+    - deploy
+    - composer

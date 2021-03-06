@@ -1,0 +1,34 @@
+---
+- name: Install aptitude
+  become: true
+  apt:
+    name: aptitude
+  tags:
+    - system
+
+- name: Install Gnupg2
+  become: true
+  apt:
+    name: gnupg2
+  tags:
+    - system
+
+- name: Create project directory and set its permissions
+  become: true
+  file:
+    path: "{{ symfony_root_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    recurse: true
+  tags:
+    - system
+
+- name: Initialize site URL /etc/hosts
+  become: true
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "{{ server_name }}"
+    line: "127.0.0.1 {{ server_name }}"
+  tags:
+    - system

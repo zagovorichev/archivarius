@@ -1,0 +1,20 @@
+---
+
+- name: Fix var directory permissions
+  file:
+    path: "{{ symfony_var_dir }}"
+    state: directory
+    mode: 0777
+    recurse: yes
+  changed_when: false
+  tags:
+    - system
+
+# env file required for composer and symfony cli
+- name: Initialize .env file
+  template:
+    src: templates/.env
+    dest: "{{ symfony_root_dir }}"
+  tags:
+    - deploy
+    - env

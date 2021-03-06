@@ -1,0 +1,8 @@
+---
+config_system_language: en_US.UTF-8
+config_system_locale: en_US.UTF-8
+symfony_root_dir: /var/www/archive
+symfony_public_dir: "{{ symfony_root_dir }}/public"
+symfony_var_dir: "{{ symfony_root_dir }}/var"
+symfony_console_path: "{{ symfony_root_dir }}/bin/console"
+symfony_app_secret: "{{ vault_symfony_secret }}"
