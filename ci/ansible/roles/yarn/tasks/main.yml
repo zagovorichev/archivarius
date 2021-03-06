@@ -27,12 +27,11 @@
 - name: Install package.json dependencies
   yarn:
     path: "{{ symfony_root_dir }}"
-    production: yes
   tags:
     - deploy
     - yarn
 
-- name: Run yar build
+- name: Run yarn build
   command: yarn run "{{ 'build' if ('prod' == symfony_env) else 'dev' }}"
   args:
     chdir: "{{ symfony_root_dir }}"
