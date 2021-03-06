@@ -1,0 +1,41 @@
+---
+- name: Install NodeJs
+  become: true
+  apt:
+    name: nodejs
+  tags:
+    - system
+    - nodejs
+
+- name: Install NPM
+  become: true
+  apt:
+    name: npm
+  tags:
+    - system
+    - nodejs
+
+- name: Install YARN
+  become: true
+  npm:
+    name: yarn
+    global: yes
+  tags:
+    - system
+    - yarn
+
+- name: Install package.json dependencies
+  yarn:
+    path: "{{ symfony_root_dir }}"
+    production: yes
+  tags:
+    - deploy
+    - yarn
+
+- name: Run yar build
+  command: yarn run "{{ 'build' if ('prod' == symfony_env) else 'dev' }}"
+  args:
+    chdir: "{{ symfony_root_dir }}"
+  tags:
+    - yarnbuild
+    - deploy
