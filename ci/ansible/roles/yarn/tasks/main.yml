@@ -31,7 +31,7 @@
     - deploy
     - yarn
 
-- name: Run yar build
+- name: Run yarn build
   command: yarn run "{{ 'build' if ('prod' == symfony_env) else 'dev' }}"
   args:
     chdir: "{{ symfony_root_dir }}"

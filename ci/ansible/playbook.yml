@@ -40,7 +40,8 @@
     - git
     - beforecomposersymfony
     - composer
-    - yarn
+    # fe build takes too many system sources, decided to do that on release
+    # - yarn
     - symfony
 
   tasks:
