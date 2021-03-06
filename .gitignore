@@ -6,3 +6,5 @@ public/build
 ci/ansible/vars/vault.yml
 vendor
 node_modules
+/ci/ansible/hosts_private.yml
+/ci/ansible/playbook.retry

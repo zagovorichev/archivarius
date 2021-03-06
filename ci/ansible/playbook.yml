@@ -5,7 +5,7 @@
 #  tasks:
 #    - ping: ~
 
-- hosts: vb
+- hosts: gcp
 
   vars_files:
     - ./vars/vault.yml
@@ -33,11 +33,11 @@
     SYMFONY_ENV: "{{ symfony_env|lower }}"
 
   roles:
-    #- system
-    #- localisation
-    #- php
-    #- git
-    #- nginx
+    - system
+    - localisation
+    - php
+    - nginx
+    - git
     - beforecomposersymfony
     - composer
     - yarn
@@ -58,11 +58,11 @@
       tags:
         - system
 
-    - name: Register code_changed variable
-      set_fact:
-        code_changed: repo_code.changed
-      tags:
-        - deploy
+#    - name: Register code_changed variable
+#      set_fact:
+#        code_changed: repo_code.changed
+#      tags:
+#        - deploy
 
       #    - debug:
       #        var: composer_self_update

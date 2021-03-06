@@ -27,7 +27,6 @@
 - name: Install package.json dependencies
   yarn:
     path: "{{ symfony_root_dir }}"
-    production: yes
   tags:
     - deploy
     - yarn
