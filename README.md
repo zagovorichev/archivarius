@@ -104,6 +104,8 @@ __variables__
 vauld_symfony_secret: "asdf1234"
 vault_ssh_ip: "127.0.0.1"
 vault_ssh_username: "www-data"
+vault_basic_username: anyuser
+vault_basic_password: anypassword
 ```
 
 #### How to use secret data:
