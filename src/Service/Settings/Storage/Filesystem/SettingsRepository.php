@@ -9,14 +9,14 @@ use App\Contract\Repository\SettingsRepositoryInterface;
 use App\Entity\Settings;
 use App\Exception\SettingsException;
 use DOMDocument;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
 
 class SettingsRepository implements SettingsRepositoryInterface
 {
     private const FILE_NAME = 'config.xml';
 
-    public function __construct(private FilesystemInterface $settingsFilesystem) {}
+    public function __construct(private Filesystem $settingsFilesystem) {}
 
     /**
      * @param SettingsInterface $settings
@@ -93,7 +93,13 @@ class SettingsRepository implements SettingsRepositoryInterface
      */
     private function getDom(): DOMDocument
     {
-        if (!$this->settingsFilesystem->has(self::FILE_NAME)) {
+        try {
+            $fileExists = $this->settingsFilesystem->fileExists(self::FILE_NAME);
+        } catch (FilesystemException $e) {
+            throw new SettingsException($e);
+        }
+
+        if (!$fileExists) {
             return $this->createFile();
         }
 
@@ -104,11 +110,14 @@ class SettingsRepository implements SettingsRepositoryInterface
         try {
             $dom->loadXML($this->settingsFilesystem->read(self::FILE_NAME));
             return $dom;
-        } catch (FileNotFoundException $e) {
+        } catch (FilesystemException) {
             throw new SettingsException('Settings storage not found');
         }
     }
 
+    /**
+     * @throws SettingsException
+     */
     private function createFile(): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -122,8 +131,15 @@ class SettingsRepository implements SettingsRepositoryInterface
         return $dom;
     }
 
+    /**
+     * @throws SettingsException
+     */
     private function saveDomFile(DOMDocument $dom): void
     {
-        $this->settingsFilesystem->put(self::FILE_NAME, $dom->saveXML());
+        try {
+            $this->settingsFilesystem->write(self::FILE_NAME, $dom->saveXML());
+        } catch (FilesystemException $e) {
+            throw new SettingsException($e);
+        }
     }
 }

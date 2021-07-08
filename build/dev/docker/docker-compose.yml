@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  archivarius-build-ansible:
+    container_name: archivarius-build-ansible
+    build:
+      context: ./ansible
+    depends_on:
+      - archivarius-server
+    networks:
+      - archivarius-build-network
+
+networks:
+  archivarius-build-network:
+    driver: bridge

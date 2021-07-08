@@ -8,9 +8,10 @@ use App\Contract\Service\Archive\BackupServiceInterface;
 use App\Entity\ArchiveRecord;
 use App\Exception\ArchiveException;
 use App\Exception\BackupException;
+use App\Exception\SettingsException;
 use App\Service\Archive\Storage\FileSystem\ArchiveRecordRepository;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,6 +35,9 @@ class DocController extends AbstractController
         return new JsonResponse($archiveRecord);
     }
 
+    /**
+     * @throws SettingsException
+     */
     #[Route('/doc/{id}', name: 'delete_doc', methods: ['DELETE'])]
     public function remove(string $id): JsonResponse
     {
@@ -46,7 +50,7 @@ class DocController extends AbstractController
     {
         try {
             $archiveRecord = $this->archiveRepository->get($id);
-        } catch (ArchiveException $e) {
+        } catch (ArchiveException) {
             return new JsonResponse(sprintf('Archive not found: %s', $id), 500);
         }
 
@@ -67,7 +71,7 @@ class DocController extends AbstractController
         try {
             $archiveRecord = $this->archiveRepository->get($id);
         } catch (ArchiveException $e) {
-            return new JsonResponse(sprintf('Archive not found: %s', $id), 500);
+            return new JsonResponse(sprintf('Archive not found: %s, [Error]: %s', $id, $e->getMessage()), 500);
         }
         $docInfo = $this->archiveRepository->getDocInfo($archiveRecord, $path);
         $docInfo['docTitle'] = $title;
@@ -91,7 +95,7 @@ class DocController extends AbstractController
     {
         try {
             $archiveRecord = $this->archiveRepository->get($id);
-        } catch (ArchiveException $e) {
+        } catch (ArchiveException) {
             return new JsonResponse(sprintf('Archive not found: %s', $id), 500);
         }
 
@@ -186,12 +190,12 @@ class DocController extends AbstractController
     }
 
     #[Route('/doc/archive', methods: ['POST'])]
-    public function export(Request $request, BackupServiceInterface $backupService, FilesystemInterface $backupFilesystem): StreamedResponse|JsonResponse
+    public function export(Request $request, BackupServiceInterface $backupService, Filesystem $backupFilesystem): StreamedResponse|JsonResponse
     {
         try {
             $path = $backupService->create($request->get('id'));
             $fileStream = $backupFilesystem->readStream($path);
-        } catch (BackupException|FileNotFoundException $e) {
+        } catch (BackupException|FilesystemException $e) {
             return new JsonResponse(sprintf('Document does not found: %s', $e->getMessage()), 404);
         }
 
@@ -207,8 +211,8 @@ class DocController extends AbstractController
         );
         $response->headers->set('Content-Disposition', $disposition);
         try {
-            $response->headers->set('Content-Type', $backupFilesystem->getMimeType($path));
-        } catch (FileNotFoundException $e) {
+            $response->headers->set('Content-Type', $backupFilesystem->mimeType($path));
+        } catch (FilesystemException $e) {
             return new JsonResponse(sprintf('Document does not found: %s', $e->getMessage()), 404);
         }
 

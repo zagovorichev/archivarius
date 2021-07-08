@@ -10,31 +10,47 @@ use App\Contract\Service\Helper\StringServiceInterface;
 use App\Contract\Service\Helper\TmpFileStorageInterface;
 use App\Entity\ArchiveRecord;
 use App\Exception\ArchiveException;
+use App\Exception\SettingsException;
 use DateTime;
 use DOMDocument;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
-use League\Flysystem\FileExistsException;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use JetBrains\PhpStorm\Pure;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
 {
     public function __construct(
-        private FilesystemInterface $archiveFilesystem,
+        private Filesystem $archiveFilesystem,
         private StringServiceInterface $stringService,
         private TmpFileStorageInterface $tmpFileStorage,
     ) { }
 
+    /**
+     * @throws SettingsException
+     */
     public function exists(string $id): bool
     {
-        return $this->archiveFilesystem->has($id);
+        try {
+            return $this->archiveFilesystem->fileExists($id);
+        } catch (FilesystemException $e) {
+            throw new SettingsException($e);
+        }
     }
 
+    /**
+     * @throws SettingsException
+     */
     public function delete(string $id): void
     {
-        $this->archiveFilesystem->deleteDir($id);
+        try {
+            $this->archiveFilesystem->deleteDirectory($id);
+        } catch (FilesystemException $e) {
+            throw new SettingsException($e);
+        }
     }
 
     /**
@@ -48,18 +64,45 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
             $archiveRecord->setId($this->generateIdentifier());
         }
 
-        if (!$this->archiveFilesystem->createDir($archiveRecord->getId())) {
-            throw new ArchiveException(sprintf('Directory "%s" was not created', $archiveRecord->getId()));
+        try {
+            if (!$this->directoryExists($archiveRecord->getId())) {
+                $this->archiveFilesystem->createDirectory($archiveRecord->getId());
+            }
+        } catch (FilesystemException $e) {
+            throw new ArchiveException(sprintf('Directory "%s" was not created. [Error]: %s', $archiveRecord->getId(), $e->getMessage()));
         }
 
         $this->saveManifest($archiveRecord);
     }
 
+    /**
+     * @throws ArchiveException
+     */
+    private function directoryExists($dirName): bool
+    {
+        try {
+            $items = $this->archiveFilesystem->listContents('');
+        } catch (FilesystemException $e) {
+            throw new ArchiveException($e);
+        }
+
+        /** @var DirectoryAttributes $item */
+        foreach ($items as $item) {
+            if ($item->isDir() && $item->path() === $dirName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @throws ArchiveException
+     */
     private function generateIdentifier(): string
     {
         do {
             $id = $this->stringService->uuid();
-        } while ($this->archiveFilesystem->has($id));
+        } while($this->directoryExists($id));
 
         return $id;
     }
@@ -77,15 +120,20 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
      * @param ArchiveRecordInterface $archiveRecord
      * @param string $extension
      * @return string
+     * @throws ArchiveException
      */
     private function generateNewAttachmentPath(ArchiveRecordInterface $archiveRecord, string $extension): string
     {
         $dir = $this->getAttachmentsPath($archiveRecord);
 
-        do {
-            $uid = $this->stringService->uuid();
-            $path = $dir.'/'.$uid.'.'.$extension;
-        } while ($this->archiveFilesystem->has($path));
+        try {
+            do {
+                $uid = $this->stringService->uuid();
+                $path = $dir . '/' . $uid . '.' . $extension;
+            } while ($this->archiveFilesystem->fileExists($path));
+        } catch (FilesystemException $e) {
+            throw new ArchiveException($e);
+        }
 
         return $path;
     }
@@ -99,8 +147,11 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
     #[ArrayShape(['docPath' => "string", 'docOrigName' => "string", 'docTitle' => "string"])]
     public function addAttachment(ArchiveRecordInterface $archiveRecord, UploadedFile $uploadedFile): array
     {
-        if (!$this->archiveFilesystem->has($this->getAttachmentsPath($archiveRecord))) {
-            $this->archiveFilesystem->createDir($this->getAttachmentsPath($archiveRecord));
+        try {
+            $this->archiveFilesystem->fileExists($this->getAttachmentsPath($archiveRecord));
+            $this->archiveFilesystem->createDirectory($this->getAttachmentsPath($archiveRecord));
+        } catch (FilesystemException) {
+            throw new ArchiveException('File system error');
         }
 
         $fStream = $this->tmpFileStorage->openStream($uploadedFile->getPathname());
@@ -131,7 +182,7 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
             $this->save($archiveRecord);
 
             return $docInfo;
-        } catch (FileExistsException $e) {
+        } catch (FilesystemException $e) {
             $this->tmpFileStorage->closeStream($fStream);
             throw new ArchiveException($e->getMessage());
         }
@@ -139,14 +190,14 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
 
     /**
      * @param string $path
-     * @return resource|false
+     * @return resource
      * @throws ArchiveException
      */
     public function getStream(string $path)
     {
         try {
             return $this->archiveFilesystem->readStream($path);
-        } catch (FileNotFoundException $e) {
+        } catch (FilesystemException) {
             throw new ArchiveException(sprintf('Attachment does not found: %s', $path));
         }
     }
@@ -159,8 +210,8 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
     public function getMimeType(string $path): string
     {
         try {
-            return $this->archiveFilesystem->getMimetype($path);
-        } catch (FileNotFoundException $e) {
+            return $this->archiveFilesystem->mimeType($path);
+        } catch (FilesystemException) {
             throw new ArchiveException(sprintf('Attachment does not found: %s', $path));
         }
     }
@@ -238,7 +289,7 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
         // delete file
         try {
             $this->archiveFilesystem->delete($path);
-        } catch (FileNotFoundException $e) {
+        } catch (FilesystemException) {
             throw new ArchiveException(sprintf('Attached file not found: %s', $path));
         }
 
@@ -315,12 +366,20 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
         return $archiveRecord;
     }
 
+    /**
+     * @throws SettingsException
+     */
     public function getAllId(): array
     {
         $identifiers = [];
-        foreach ($this->archiveFilesystem->listContents() as $item) {
+        try {
+            $directoryListing = $this->archiveFilesystem->listContents('');
+        } catch (FilesystemException $e) {
+            throw new SettingsException($e);
+        }
+        foreach ($directoryListing as $item) {
             if ($item['type'] === 'dir') {
-                $identifiers[] = $item['filename'];
+                $identifiers[] = $item['path'];
             }
         }
         return $identifiers;
@@ -342,7 +401,7 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
 
         try {
             return $this->archiveFilesystem->read($manPath);
-        } catch (FileNotFoundException $e) {
+        } catch (FilesystemException) {
             throw new ArchiveException('Manifest file not found');
         }
     }
@@ -355,7 +414,14 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
     {
         $manPath = $this->getPathToManifest($archiveRecord->getId());
         $creationDate = null;
-        if ($this->archiveFilesystem->has($manPath)) {
+
+        try {
+            $fileExists = $this->archiveFilesystem->fileExists($manPath);
+        } catch (FilesystemException $e) {
+            throw new ArchiveException($e);
+        }
+
+        if ($fileExists) {
             // versions?
             // $vManPath = $manPath.'_'.microtime();
             // rename($manPath, $vManPath);
@@ -367,7 +433,9 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
 
             try {
                 $this->archiveFilesystem->delete($manPath);
-            } catch (FileNotFoundException $e) {}
+            } catch (FilesystemException) {
+                // do nothing
+            }
         }
 
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -421,11 +489,24 @@ class ArchiveRecordRepository implements ArchiveRecordRepositoryInterface
             throw new ArchiveException('Manifest path is not defined');
         }
 
-        $this->archiveFilesystem->put($manPath, $dom->saveXML());
+        try {
+            $this->archiveFilesystem->write($manPath, $dom->saveXML());
+        } catch (FilesystemException $e) {
+            throw new ArchiveException($e);
+        }
     }
 
+    /**
+     * @param ArchiveRecordInterface $archiveRecord
+     * @return array
+     * @throws ArchiveException
+     */
     public function getAttachments(ArchiveRecordInterface $archiveRecord): array
     {
-        return $this->archiveFilesystem->listContents($this->getAttachmentsPath($archiveRecord));
+        try {
+            return $this->archiveFilesystem->listContents($this->getAttachmentsPath($archiveRecord))->toArray();
+        } catch (FilesystemException $e) {
+            throw new ArchiveException($e);
+        }
     }
 }

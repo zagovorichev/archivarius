@@ -1,0 +1,23 @@
+services:
+  dropbox_config:
+    class: Spatie\FlysystemDropbox\DropboxAdapter
+    arguments:
+      [ '@Spatie\Dropbox\Client', 'config' ]
+  dropbox_archive:
+    class: Spatie\FlysystemDropbox\DropboxAdapter
+    arguments:
+      [ '@Spatie\Dropbox\Client', 'archive' ]
+
+  dropbox_settings:
+    class: Spatie\FlysystemDropbox\DropboxAdapter
+    arguments:
+      [ '@Spatie\Dropbox\Client', 'settings' ]
+
+  dropbox_backup:
+    class: Spatie\FlysystemDropbox\DropboxAdapter
+    arguments:
+      [ '@Spatie\Dropbox\Client', 'backup' ]
+
+  Spatie\Dropbox\Client:
+    bind:
+      $accessTokenOrAppCredentials: '%env(DROPBOX_TOKEN)%'

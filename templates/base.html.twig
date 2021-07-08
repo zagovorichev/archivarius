@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}DocIEs &circleddash; 2020{% endblock %}</title>
+        <title>{% block title %}DocIEs &circleddash; {{ 'now' | date('Y') }}{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}

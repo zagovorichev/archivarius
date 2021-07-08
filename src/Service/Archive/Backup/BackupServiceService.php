@@ -10,26 +10,32 @@ use App\Contract\Service\Helper\TmpFileStorageInterface;
 use App\Contract\Service\Helper\ZipServiceInterface;
 use App\Exception\BackupException;
 use App\Exception\ZipperException;
-use League\Flysystem\FileExistsException;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
 
 class BackupServiceService implements BackupServiceInterface
 {
     public function __construct(
-        private FilesystemInterface $archiveFilesystem,
-        private FilesystemInterface $backupFilesystem,
+        private Filesystem $archiveFilesystem,
+        private Filesystem $backupFilesystem,
         private TmpFileStorageInterface $tmpFileStorage,
         private ZipServiceInterface $zipper,
         private StringServiceInterface $stringService,
     ) { }
 
+    /**
+     * @throws BackupException
+     */
     private function generateNewBackupPath(): string
     {
-        do {
-            $uid = $this->stringService->uuid();
-            $path = $uid.'.zip';
-        } while ($this->backupFilesystem->has($path));
+        try {
+            do {
+                $uid = $this->stringService->uuid();
+                $path = $uid . '.zip';
+            } while ($this->backupFilesystem->fileExists($path));
+        } catch (FilesystemException $e) {
+            throw new BackupException($e);
+        }
 
         return $path;
     }
@@ -45,9 +51,10 @@ class BackupServiceService implements BackupServiceInterface
         $fStream = $this->tmpFileStorage->openStream($path);
         try {
             $this->backupFilesystem->writeStream($backupPath, $fStream);
-        } catch (FileExistsException $e) {
+        } catch (FilesystemException) {
             throw new BackupException('Backup already exists');
         }
+
         $this->tmpFileStorage->closeStream($fStream);
         $this->tmpFileStorage->remove($path);
         return $backupPath;
@@ -64,26 +71,28 @@ class BackupServiceService implements BackupServiceInterface
         $tmpArchivePath = $this->tmpFileStorage->create();
         try {
             $tmpZipArchive = $this->zipper->initialize($tmpArchivePath);
-        } catch (ZipperException $e) {
+        } catch (ZipperException) {
             throw new BackupException('Zip can not be created');
         }
 
         $filesTmp = [];
         foreach ($archiveIds as $archiveId) {
-            if (!$this->archiveFilesystem->has($archiveId)) {
-                throw new BackupException(sprintf('File "%s" not found', $archiveId));
+            try {
+                $directoryListing = $this->archiveFilesystem->listContents($archiveId, true);
+            } catch (FilesystemException $e) {
+                throw new BackupException($e);
             }
-
-            foreach ($this->archiveFilesystem->listContents($archiveId, true) as $file) {
+            foreach ($directoryListing as $file) {
                 if ($file['type'] !== 'file') {
                     continue;
                 }
                 $tmpFilePath = $this->tmpFileStorage->create();
                 try {
                     $fStream = $this->archiveFilesystem->readStream($file['path']);
-                } catch (FileNotFoundException $e) {
+                } catch (FilesystemException) {
                     throw new BackupException('Can not read the file');
                 }
+
                 $this->tmpFileStorage->writeStream($tmpFilePath, $fStream);
                 $tmpZipArchive->addFile($tmpFilePath, $file['path']);
                 $filesTmp[] = $tmpFilePath; // we can't delete files before zip closed
@@ -102,13 +111,21 @@ class BackupServiceService implements BackupServiceInterface
 
     /**
      * @param string $path
+     * @throws BackupException
      */
     public function remove(string $path): void
     {
-        if ($this->backupFilesystem->has($path)) {
+        try {
+            $fileExists = $this->backupFilesystem->fileExists($path);
+        } catch (FilesystemException $e) {
+            throw new BackupException($e);
+        }
+        if ($fileExists) {
             try {
                 $this->backupFilesystem->delete($path);
-            } catch (FileNotFoundException $e) {}
+            } catch (FilesystemException $e) {
+                throw new BackupException($e);
+            }
         }
     }
 }
