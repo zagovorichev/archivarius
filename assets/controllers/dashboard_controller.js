@@ -7,6 +7,7 @@ import editRecord from '../components/edit-record';
 import settings from "../components/settings";
 import searchChart from "../components/search-chart";
 import tagSettings from "../components/settings-tag";
+import donut from "../components/donut";
 
 export default class extends Controller {
     connect() {
@@ -16,6 +17,7 @@ export default class extends Controller {
         seeker().init();
         createBtn().init();
         searchChart().init();
+        donut().init();
     }
 
     disconnect() {
@@ -25,5 +27,6 @@ export default class extends Controller {
         seeker().destroy();
         createBtn().destroy();
         searchChart().destroy();
+        donut().destroy();
     }
 }

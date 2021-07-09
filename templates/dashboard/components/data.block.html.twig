@@ -1,38 +1,28 @@
 <div class="row">
-    <div class="col-md-7 col-lg-6">
-        <div class="container documents-table">
+    <div class="col-12">
+        <div class="documents-table container">
             <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">{{ 'Loading'|trans }}...</span>
             </div>
-            <div>
+            <div class="container">
                 <b class="found-count text-muted mr-5" style="display: none">{{ 'Found'|trans }}: <span class="cnt">0</span></b>
                 <b class="text-muted">{{ 'Total spent'|trans }}: <span class="amount-fv">0</span></b>
+                <span class="fa fa-pie-chart ml-1 chart-btn"></span>
             </div>
-            <table class="table table-striped table-hover table-bordered table-success"
-                   data-text="{{ 'No records found'|trans }}"
-                   style="display: none">
-                <thead>
-                <tr>
-                    <th>{{ 'Title'|trans }}</th>
-                    <th>{{ 'Tags'|trans }}</th>
-                    <th>{{ 'Price'|trans }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-md-5 col-lg-6">
-        <div class="mr-5">
-            <div class="float-left">
-                <label>
-                    <input type="checkbox" class="aggregate-floatval">
-                    {{ 'Unique'|trans }}
-                </label>
+            <div class="container">
+                <table class="table table-striped table-hover table-bordered table-success"
+                       data-text="{{ 'No records found'|trans }}">
+                    <thead>
+                    <tr>
+                        <th>{{ 'Title'|trans }}</th>
+                        <th>{{ 'Tags'|trans }}</th>
+                        <th>{{ 'Price'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
-            <h3 class="float-right">{{ 'Total' }}: <span class="total-floatvals">0</span></h3>
         </div>
-        <canvas id="searchTagChart" width="400" height="400" data-text="{{ 'Chart by categories'|trans }}"></canvas>
     </div>
 </div>

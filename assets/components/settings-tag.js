@@ -30,6 +30,7 @@ export default function() {
             method: 'GET',
         }).done(function (resp) {
             if (!netTable) {
+                console.log(resp)
                 netTable = $table.DataTable({
                     paging: false,
                     searching: false,
@@ -43,6 +44,7 @@ export default function() {
                     columns: [
                         { data: 'title' },
                         { data: 'color' },
+                        { render: (data, type, row, meta) => `<span style="color: ${row.color}">&block;</span>` }
                     ],
                     data: resp.tags,
                 });

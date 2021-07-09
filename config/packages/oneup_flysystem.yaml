@@ -30,10 +30,10 @@ oneup_flysystem:
 
     filesystems:
         backup_filesystem:
-            adapter: backup_adapter_dpbx
+            adapter: backup_adapter #_dpbx
         settings_filesystem:
-            adapter: settings_adapter_dpbx
+            adapter: settings_adapter #_dpbx
         archive_filesystem:
-            adapter: archive_adapter_dpbx
+            adapter: archive_adapter #_dpbx
         default_filesystem:
-            adapter: default_adapter_dpbx
+            adapter: default_adapter #_dpbx
