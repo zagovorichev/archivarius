@@ -1,6 +1,6 @@
 import dropzone from "./dropzone";
-import 'datatables.net-bs4';
 import $ from "jquery";
+import 'datatables.net-bs4';
 import editMedia from './edit-media'
 import documents from "./documents";
 import archivarius from "./archivarius";

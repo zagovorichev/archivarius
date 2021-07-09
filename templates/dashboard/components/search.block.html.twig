@@ -1,7 +1,7 @@
 <div class="container">
     <span class="text-muted fa fa-gear float-right settings"></span>
     <!-- search box -->
-    <div class="container mt-lg-5">
+    <div class="mt-lg-5">
         <div class="form-group seeker-group">
             <label for="seeker" class="label text-muted h1">{{ 'document_search' | trans }}</label>
             <p class="text-muted small">{{ 'count_resources'|trans({'count': count}) }}</p>
@@ -23,8 +23,9 @@
             <div class="tags">
                 <div class="tags-list">
                     {% for tag in tags %}
-                        <label class="tag-label" style="background-color: {{ tag.color }}">
+                        <label class="tag-label">
                             <input class="tag-item" type="checkbox" name="tag" value="{{ tag.title }}"> {{ tag.title }}
+                            <span style="color: {{ tag.color }}">&block;</span>
                         </label>
                     {% endfor %}
                 </div>

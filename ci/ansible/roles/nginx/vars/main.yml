@@ -1,2 +1,5 @@
 ---
 server_name: "{{ host_server_name|default('archivarius.vagrant') }}"
+basic_passwd_path: /etc/nginx/basic_passwd
+basic_auth_user: "{{ vault_basic_username }}"
+basic_auth_password: "{{ vault_basic_password }}"

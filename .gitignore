@@ -7,3 +7,4 @@ vendor
 node_modules
 /ci/ansible/hosts_private.yml
 /ci/ansible/playbook.retry
+/phpunit.phar

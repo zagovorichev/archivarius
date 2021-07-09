@@ -8,21 +8,42 @@
   tags:
     - system
 
+- name: Install python-passlib for basic auth
+  become: true
+  apt:
+    name: python-passlib
+    state: latest
+  tags:
+    - nginx
+
+- name: Create Basic Auth file
+  become: true
+  htpasswd:
+    path: "{{ basic_passwd_path }}"
+    name: "{{ basic_auth_user }}"
+    password: "{{ basic_auth_password }}"
+  tags:
+    - system
+    - nginx
+
 - name: Set Nginx configuration
   become: true
   template:
     src: templates/symfony.conf
-    dest: "/etc/nginx/sites-available/{{ server_name }}.conf"
-  notify: Restart Nginx
+    # dest: "/etc/nginx/sites-available/{{ server_name }}.conf"
+    # replace default as it is only 1 entry point on the server
+    dest: "/etc/nginx/sites-available/default.conf"
   tags:
     - system
+    - nginx
 
 - name: Create symbolic link for nginx enabled file
   become: true
   file:
-    src: "/etc/nginx/sites-available/{{ server_name }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
+    src: "/etc/nginx/sites-available/default.conf"
+    dest: "/etc/nginx/sites-enabled/default.conf"
     state: link
   notify: Restart Nginx
   tags:
     - system
+    - nginx
