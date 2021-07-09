@@ -33,5 +33,3 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x -o /tmp/nodesource_setup.sh \
 
 RUN rm -rf /var/www/html \
     && chmod 0777 /tmp/
-
-RUN mv /var/www/html/.env.example /var/www/html/.env

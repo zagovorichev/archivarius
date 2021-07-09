@@ -11,15 +11,15 @@ use App\Entity\Project;
 use App\Exception\ProjectException;
 use DOMDocument;
 use DOMElement;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
 
 class ProjectsRepository implements ProjectsRepositoryInterface
 {
     private const FILE_NAME = 'projects.xml';
 
     public function __construct(
-        private FilesystemInterface $settingsFilesystem,
+        private Filesystem $settingsFilesystem,
         private StringServiceInterface $stringService,
     ) {}
 
@@ -148,7 +148,7 @@ class ProjectsRepository implements ProjectsRepositoryInterface
     {
         try {
             $this->getProject($id);
-        } catch (ProjectException $e) {
+        } catch (ProjectException) {
             return false;
         }
         return true;
@@ -223,7 +223,13 @@ class ProjectsRepository implements ProjectsRepositoryInterface
      */
     private function getDom(): DOMDocument
     {
-        if (!$this->settingsFilesystem->has(self::FILE_NAME)) {
+        try {
+            $fileExists = $this->settingsFilesystem->fileExists(self::FILE_NAME);
+        } catch (FilesystemException $e) {
+            throw new ProjectException($e);
+        }
+
+        if (!$fileExists) {
             return $this->createFile();
         }
 
@@ -234,11 +240,14 @@ class ProjectsRepository implements ProjectsRepositoryInterface
         try {
             $dom->loadXML($this->settingsFilesystem->read(self::FILE_NAME));
             return $dom;
-        } catch (FileNotFoundException $e) {
+        } catch (FilesystemException) {
             throw new ProjectException('Storage not found');
         }
     }
 
+    /**
+     * @throws ProjectException
+     */
     private function createFile(): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -252,8 +261,15 @@ class ProjectsRepository implements ProjectsRepositoryInterface
         return $dom;
     }
 
+    /**
+     * @throws ProjectException
+     */
     private function saveDomFile(DOMDocument $dom): void
     {
-        $this->settingsFilesystem->put(self::FILE_NAME, $dom->saveXML());
+        try {
+            $this->settingsFilesystem->write(self::FILE_NAME, $dom->saveXML());
+        } catch (FilesystemException $e) {
+            throw new ProjectException($e);
+        }
     }
 }

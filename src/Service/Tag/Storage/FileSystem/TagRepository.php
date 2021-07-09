@@ -9,14 +9,15 @@ use App\Entity\Tag;
 use App\Exception\TagException;
 use DOMDocument;
 use DOMElement;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 class TagRepository implements TagRepositoryInterface
 {
     private const FILE_TAGS = 'tags.xml';
 
-    public function __construct(private FilesystemInterface $settingsFilesystem) {}
+    public function __construct(private Filesystem $settingsFilesystem) {}
 
     /**
      * List of tags
@@ -117,7 +118,12 @@ class TagRepository implements TagRepositoryInterface
      */
     private function getDom(): DOMDocument
     {
-        if (!$this->settingsFilesystem->has(self::FILE_TAGS)) {
+        try {
+            $fileExists = $this->settingsFilesystem->fileExists(self::FILE_TAGS);
+        } catch (FilesystemException $e) {
+            throw new TagException($e);
+        }
+        if (!$fileExists) {
             return $this->createTagsFile();
         }
 
@@ -128,11 +134,14 @@ class TagRepository implements TagRepositoryInterface
         try {
             $dom->loadXML($this->settingsFilesystem->read(self::FILE_TAGS));
             return $dom;
-        } catch (FileNotFoundException $e) {
+        } catch (FileNotFoundException | FilesystemException $e) {
             throw new TagException('Tag storage not found');
         }
     }
 
+    /**
+     * @throws TagException
+     */
     private function createTagsFile(): DOMDocument
     {
         $dom = new DOMDocument('1.0', 'utf-8');
@@ -142,12 +151,24 @@ class TagRepository implements TagRepositoryInterface
         $tagsEl = $dom->createElement('tags');
         $dom->appendChild($tagsEl);
 
-        $this->saveDomFile($dom);
+        try {
+            $this->saveDomFile($dom);
+        } catch (FilesystemException $e) {
+            throw new TagException($e);
+        }
         return $dom;
     }
 
+    /**
+     * @param DOMDocument $dom
+     * @throws TagException
+     */
     private function saveDomFile(DOMDocument $dom): void
     {
-        $this->settingsFilesystem->put(self::FILE_TAGS, $dom->saveXML());
+        try {
+            $this->settingsFilesystem->write(self::FILE_TAGS, $dom->saveXML());
+        } catch (FilesystemException $e) {
+            throw new TagException($e);
+        }
     }
 }

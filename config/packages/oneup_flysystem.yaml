@@ -3,22 +3,37 @@ oneup_flysystem:
     adapters:
         default_adapter:
             local:
-                directory: '%kernel.cache_dir%/flysystem'
+                location: '%kernel.cache_dir%/flysystem'
         archive_adapter:
             local:
-                directory: '%kernel.project_dir%/var/archive'
+                location: '%kernel.project_dir%/var/archive'
         settings_adapter:
             local:
-                directory: '%kernel.project_dir%/var/settings'
+                location: '%kernel.project_dir%/var/settings'
         backup_adapter:
             local:
-                directory: '%kernel.project_dir%/var/backup'
+                location: '%kernel.project_dir%/var/backup'
+
+        # Dropbox adapters to store everything remotely, to free space and reduce data storage needed
+        default_adapter_dpbx:
+            custom:
+                service: dropbox_config
+        archive_adapter_dpbx:
+            custom:
+                service: dropbox_archive
+        settings_adapter_dpbx:
+            custom:
+                service: dropbox_settings
+        backup_adapter_dpbx:
+            custom:
+                service: dropbox_backup
+
     filesystems:
         backup_filesystem:
-            adapter: backup_adapter
+            adapter: backup_adapter #_dpbx
         settings_filesystem:
-            adapter: settings_adapter
+            adapter: settings_adapter #_dpbx
         archive_filesystem:
-            adapter: archive_adapter
+            adapter: archive_adapter #_dpbx
         default_filesystem:
-            adapter: default_adapter
+            adapter: default_adapter #_dpbx
